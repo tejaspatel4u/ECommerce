@@ -1,0 +1,61 @@
+﻿@model ICollection<ECommerce.Models.ProductViewModel>
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="table-header">
+    <h1>Product List</h1>
+</div>
+<div class="row" style="margin-left: 0;margin-right: 0;background-color:#fff;">
+    <div class="col-xs-12" style="padding-left: 0;">
+        <div class="col-sm-2 toolbar_links" style="padding: 5px 0px;">
+            <a class="btn btn-primary btn-sm active" role="button" aria-pressed="true" href="@Url.Action("Create", "Home")">Add Product</a>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12 text-success">
+        @if(Convert.ToString(TempData["Message"]) != string.Empty)
+        {
+            @Html.Raw(TempData["Message"])
+        }
+    </div>
+    <div class="col-xs-12">
+        <div class="clearfix">
+            <div class="pull-right tableTools-container"></div>
+        </div>
+        <div>
+            @Html.Partial("_ViewProduct", Model)
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/scripts/jquery.dataTables.min.js"></script>
+    
+    <script type="text/javascript">
+        function DeleteProduct(ProductId) {
+            if (confirm('Are you sure you want to delete this Product?')) {
+                @*var APIURL = '@ViewBag.APIURL';*@
+                var APIURL = '@Url.Action("DeleteProduct","Home")';
+                $.ajax({
+                    url: APIURL + '?ProductId=' + ProductId,
+                    type: 'POST',
+                    dataType: 'json',
+                    async: false,
+                    success: function () {
+                        alert('Product Deleted Successfully');
+                        //window.location = '@Url.Action("Index", "Home")';
+                        location.reload();
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                        alert(textStatus + '\n' + errorThrown);
+                    }
+                });
+            }
+            else {
+                return false;
+            }
+        }
+    </script>
+}

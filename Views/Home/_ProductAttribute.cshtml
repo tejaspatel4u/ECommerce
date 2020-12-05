@@ -1,0 +1,28 @@
+﻿@model ICollection<ECommerce.Models.ProductAttributeLookupViewModel>
+
+<div class="panel panel-default">
+    <div class="panel-heading">Product Attributes</div>
+    <div class="panel-body">
+
+        <div class="row">
+            @if (Model != null && Model.Count > 0)
+            {
+                foreach (var item in Model)
+                {
+                    <div class="col-md-2">
+                        <label><span style="color:red;">*</span>@Html.Raw(item.AttributeName):</label>
+                    </div>
+                    <div class="col-md-10">
+                        @*@Html.TextBoxFor(m => item.AttributeId, null, new { id = "txtAttribute_" + item.AttributeId, autocomplete = "off", @class = "form-control", maxlength = "250", required = "required" })
+                            @Html.ValidationMessageFor(m => item.AttributeId, null, new { @class = "text-danger" })*@
+                        @Html.TextBox("txtAttribute_" + item.AttributeId, item.AttributeValue, new { id = "txtAttribute_" + item.AttributeId, autocomplete = "off", @class = "form-control", maxlength = "250", required = "required" })
+                        @*@Html.ValidationMessage("txtAttribute_" + item.AttributeId, "Please enter Attribute Value", new { @class = "text-danger" })*@
+                    </div>
+                    <div class="col-sm-12">
+                        &nbsp;
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>

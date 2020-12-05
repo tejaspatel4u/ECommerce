@@ -1,0 +1,97 @@
+﻿@model ECommerce.Models.ProductViewModel
+@{
+    ViewBag.Title = "Add/Edit Product";
+}
+
+@using (Html.BeginForm())
+{
+    <div id="divLoading" style="margin: 0px; padding: 0px; position: fixed; right: 0px;
+    top: 0px; width: 100%; height: 100%; background-color: #ffffff; z-index: 30001;
+    opacity: .6; filter: alpha(opacity=70); display: none;">
+        <div class="loadingtext" style="position: absolute; top: 40%; left: 40%; padding-top: 10px;">
+            <span>
+                <img src="~/Content/Images/loading.gif" alt="" />
+            </span> Loading, please wait...
+        </div>
+    </div>
+    <div class="row">
+        @*@Html.ValidationSummary(false, "Please fix the following error and then submit the form")*@
+        @Html.ValidationSummary(true, "",new { @class = "text-danger" })
+        <br />
+        <div class="col-md-2">
+            <label><span style="color:red;">*</span>Product Category:  </label>
+        </div>
+        <div class="col-md-5">
+            @Html.DropDownList("ProdCatId", new SelectList(ViewBag.CategoryList, "Value", "Text", Model.ProdCatId), "--Select--", new { @onchange = "GetAttributes();", @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.ProdCatId, "", new { @class = "text-danger" })
+            @Html.HiddenFor(m => m.ProdCatId)
+            @Html.HiddenFor(m => m.ProductId)
+            @*@Html.TextBoxFor(a => a.QuestionTypeName, new { id = "txtQuestionTypeName", @class = "form-control", autocomplete = "off", @maxlength = "100" })
+            @Html.ValidationMessageFor(a => a.QuestionTypeName)*@
+        </div>
+        <div class="col-sm-12">
+            &nbsp;
+        </div>
+        <div id="divAttribute" class="col-md-12"></div>
+        <div class="col-md-2">
+            <label><span style="color:red;">*</span>Product Name:  </label>
+        </div>
+        <div class="col-md-10">
+            @Html.TextBoxFor(a => a.ProductName, new { @class = "form-control", autocomplete = "off", @maxlength = "250" })
+            @Html.ValidationMessageFor(a => a.ProductName, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-sm-12">
+            &nbsp;
+        </div>
+        <div class="col-md-2">
+            <label><span style="color:red;">*</span>Product Description:  </label>
+        </div>
+        <div class="col-md-10">
+            @Html.TextAreaFor(a => a.ProductDescription, new { @class = "form-control", autocomplete = "off", @maxlength = "4000" })
+            @Html.ValidationMessageFor(a => a.ProductDescription, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-sm-12">
+            &nbsp;
+        </div>
+        <div class="col-sm-12" style="text-align:center;">
+            <input type="submit" class="btn btn-primary" value="Save" />
+            @*<input type="button" class="btn btn-primary" value="Clear" />*@
+            <input type="button" class="btn btn-primary" value="Cancel" id="btnCancel" />
+        </div>
+    </div>
+}
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            if ($("#ProductId").val() != '' && $("#ProductId").val() != 0) {
+                var ProdCatId = '@Model.ProdCatId';
+                $("#ProdCatId").val(ProdCatId);
+            }
+            var CategoryId = $("#ProdCatId").val();
+            if (CategoryId != '') {
+                GetAttributes();
+            }
+
+            $("#btnCancel").click(function () {
+                window.location = '@Url.Action("Index","Home")';
+            });
+        });
+
+        function GetAttributes() {
+            $("#divLoading").show();
+            var CategoryId = $("#ProdCatId").val();
+            var ProductId = $("#ProductId").val();
+
+            if (CategoryId != '') {
+                $.get('@Url.Action("GetAttributes","Home")' + '?ProdCatId=' + CategoryId + '&ProductId=' + ProductId, function (data) {
+                        $('#divAttribute').html(data);
+                });
+            }
+            else {
+                $('#divAttribute').html('');
+            }
+            $("#divLoading").hide();
+        }
+    </script>
+
+}
