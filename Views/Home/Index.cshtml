@@ -20,6 +20,9 @@
             @Html.Raw(TempData["Message"])
         }
     </div>
+    <div class="col-xs-12 text-center">
+        @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+    </div>
     <div class="col-xs-12">
         <div class="clearfix">
             <div class="pull-right tableTools-container"></div>

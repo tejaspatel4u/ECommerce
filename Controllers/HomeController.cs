@@ -35,7 +35,7 @@ namespace ECommerce.Controllers
 
                     objProduct = Enumerable.Empty<ProductViewModel>();
 
-                    ModelState.AddModelError(string.Empty, "Server error. Please contact administrator.");
+                    ModelState.AddModelError(string.Empty, "Server error in API. Please contact administrator.");
                 }
             }
 
