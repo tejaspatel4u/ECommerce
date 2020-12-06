@@ -64,30 +64,29 @@ namespace ECommerce.Controllers
 
                     var CategoryList = readTask.Result;
                     ViewBag.CategoryList = new SelectList(CategoryList, "ProdCatId", "CategoryName");
+
+                    if (ProductId != 0) //Edit Mode load all values
+                    {
+                        responseTask = client.GetAsync("GetAllProducts?Id=" + ProductId);
+                        responseTask.Wait();
+
+                        result = responseTask.Result;
+                        if (result.IsSuccessStatusCode)
+                        {
+                            var readTaskEdit = result.Content.ReadAsAsync<ProductViewModel>();
+                            readTaskEdit.Wait();
+
+                            objProduct = readTaskEdit.Result;
+                        }
+                    }
                 }
                 else //web api sent error response 
                 {
-                    //log response status here..
-
-                    //objProduct = Enumerable.Empty<ProductViewModel>();
-
-                    ModelState.AddModelError(string.Empty, "Server error. Please contact administrator.");
+                    ViewBag.CategoryList = new List<SelectListItem>();
+                    ModelState.AddModelError(string.Empty, "Server error in API. Please contact administrator.");
                 }
 
-                if (ProductId != 0) //Edit Mode
-                {
-                    responseTask = client.GetAsync("GetAllProducts?Id=" + ProductId);
-                    responseTask.Wait();
-
-                    result = responseTask.Result;
-                    if (result.IsSuccessStatusCode)
-                    {
-                        var readTask = result.Content.ReadAsAsync<ProductViewModel>();
-                        readTask.Wait();
-
-                        objProduct = readTask.Result;
-                    }
-                }
+                
             }
 
             return View(objProduct);
