@@ -4,7 +4,7 @@
 <h2>@ViewBag.Title.</h2>
 <h3>@ViewBag.Message</h3>
 <link href="~/Content/jquery.dataTables.min.css" rel="stylesheet" />
-<table id="example" class="display" style="width:100%">
+<table id="example" class="display" style="width:100%;display:none;">
     <thead>
         <tr>
             <th>Name</th>
@@ -487,11 +487,11 @@
 @*<p>Use this area to provide additional information.</p>*@
 @section scripts{
     <script src="~/scripts/jquery.dataTables.min.js"></script>
-    <script type="text/javascript">
+    @*<script type="text/javascript">
         $(document).ready(function () {
             $('#example').DataTable({
                 "order": [[3, "desc"]]
             });
         });
-    </script>
+    </script>*@
 }
